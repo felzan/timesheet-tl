@@ -22,6 +22,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
+                .httpBasic()
+                .and()
                 .authorizeRequests()
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/v3/**").permitAll()
@@ -29,19 +31,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authenticated()
                 .and()
                 .formLogin();
-        httpSecurity.csrf()
-                .ignoringAntMatchers("/h2-console/**");
-        httpSecurity.headers()
-                .frameOptions()
-                .sameOrigin();
+        httpSecurity.csrf().disable();
     }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
-                .usersByUsernameQuery("SELECT * FROM USERS WHERE username = ?")
-                .authoritiesByUsernameQuery("SELECT * FROM AUTHORITIES WHERE username = ?");
+                .usersByUsernameQuery("SELECT username, password, enabled FROM USERS WHERE username = ?")
+                .authoritiesByUsernameQuery("SELECT username, authority FROM AUTHORITIES WHERE username = ?");
     }
 
     @Bean

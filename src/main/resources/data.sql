@@ -16,3 +16,17 @@ INSERT INTO AUTHORITIES (username, authority)
   values ('admin@email.com', 'ROLE_ADMIN'),
          ('p1@email.com', 'ROLE_USER'),
          ('p2@email.com', 'ROLE_USER');
+
+INSERT INTO projects (name) VALUES
+('Projeto Cliente A'),
+('Projeto Cliente B');
+
+INSERT INTO allocation VALUES
+(1, 2),
+(2, 2),
+(2, 3);
+
+INSERT INTO hours (hours, `day`, project_id, user_id) VALUES ('08:30:00', '2020-12-01', 1, 2);
+INSERT INTO hours (hours, `day`, project_id, user_id) VALUES ('08:30:00', '2020-12-01', 1, 2);
+INSERT INTO hours (hours, `day`, project_id, user_id) VALUES ('08:40:00', '2020-12-01', 1, 2);
+INSERT INTO hours (hours, `day`, project_id, user_id) VALUES ('08:20:00', '2020-12-01', 1, 2);

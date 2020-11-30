@@ -1,13 +1,10 @@
 package com.felzan.timesheet;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -17,9 +14,17 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping(value = "api/v1/projects", produces = APPLICATION_JSON_VALUE)
 public class ProjectsController {
 
+    private final ProjectService projectService;
+
     @GetMapping(value = "")
-    public ResponseEntity<List<String>> get() {
-         String name = SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString();
-        return ResponseEntity.ok(Collections.singletonList(name));
+    public ResponseEntity<List<ProjectSummary>> getProjects() {
+        return ResponseEntity.ok(projectService.summary());
+    }
+
+    @PostMapping(value = "/{projectId}/hours", consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> insertHours(@PathVariable Integer projectId,
+                                         @RequestBody HoursRequest hoursRequest) {
+        projectService.insertHours(hoursRequest, projectId);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
